@@ -24,18 +24,18 @@ Step 4, Install `trec_eval` (http://trec.nist.gov/trec_eval/)
 
 Step 5, Add the Fedweb14 resources (optionally add the following parameters):
 
+    java -cp target/searsiafedweb.jar org.searsia.fedweb.FedwebEngines
+
 * 1st: the directory of the downloaded data (default: `fedwebgh`);
 * 2nd: the directory where you want the index (default: `index`);
 * 3rd: the name of the index (default `fedbweb14`).
 
-    java -cp target/searsiafedweb.jar org.searsia.fedweb.FedwebEngines
-
 Step 6, Create the FedWeb14 sample index:
+
+    java -cp searsiaserver.jar org.searsia.fedweb.FedwebSamples
 
 * You see "Index 0XX" for each engine that has samples;
 * Some engines do not exist, causing normal warnings ("No e006.xml");
-
-    java -cp searsiaserver.jar org.searsia.fedweb.FedwebSamples
 
 Step 7, Start the Searsia server:
 
