@@ -13,6 +13,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import org.searsia.Hit;
 import org.searsia.SearchResult;
 import org.searsia.index.SearchResultIndex;
@@ -26,6 +30,7 @@ import org.searsia.index.SearchResultIndex;
 public class FedwebSamples extends DefaultHandler {
 
 	
+    private static final Logger LOGGER = Logger.getLogger("org.searsia");
 	private final static Pattern noXMLPat = Pattern.compile("(?s)\\<[^>]+>\\>"); // TODO: This does not work, why? whyyyyy??
 	// Maybe: http://stackoverflow.com/questions/16008974/strange-java-unicode-regular-expression-stringindexoutofboundsexception
 	
@@ -41,7 +46,9 @@ public class FedwebSamples extends DefaultHandler {
 
     public FedwebSamples(SearchResultIndex index, String xmlFile)
     		throws SAXException, ParserConfigurationException, IOException {
-    	this.index = index; 
+        this.index = index;
+        LOGGER.addAppender(new ConsoleAppender());
+        LOGGER.setLevel(Level.WARN);
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();  
         SAXParser saxParser = saxParserFactory.newSAXParser();  
         saxParser.parse(xmlFile, this);
