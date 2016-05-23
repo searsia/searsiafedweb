@@ -1,5 +1,5 @@
-Searsia FedWeb Experiments
-==========================
+Searsia FedWeb14 Experiments
+============================
 
 Step 1, Download from FedWeb Greatest Hits (https://fedwebgh.intec.ugent.be):
 
@@ -58,5 +58,5 @@ Expected result:
 
     topic,nDCG@10,nDCG@20,nDCG@100,nP@1,nP@5
     (...)
-    all,0.2056,0.2627,0.2622,0.1532,0.2034
+    all,0.6115,0.6691,0.6861,0.4307,0.5139
 
