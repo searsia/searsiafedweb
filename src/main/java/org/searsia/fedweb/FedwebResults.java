@@ -161,7 +161,7 @@ public class FedwebResults extends DefaultHandler  {
     	}
     	
     	file = "local_" + file;
-    	  	   	
+
     	/* Special directory, to simulate search engine */
     	String resultDirName = path + "/" + file + "_results";
     	File resultDir = new File(resultDirName);
@@ -174,11 +174,11 @@ public class FedwebResults extends DefaultHandler  {
                 String tid = Integer.toString(t);
                 String rid = "00" + Integer.toString(r); 
                 rid = rid.substring(rid.length() -3, rid.length());
+                String xmlFile = data + "search_data/fedweb14/FW14-topics-search/e" + rid + "/" + tid + ".xml";
                 try {
-                    String xmlFile = data + "search_data/fedweb14/FW14-topics-search/e" + rid + "/" + tid + ".xml";
                     new FedwebResults(xmlFile, resultDirName);
                 } catch (IOException e) {
-                	System.out.println("Warning: No e" + rid + "/" + tid + ".xml");
+                    System.out.println("Warning: No " + xmlFile);
                 }
             }
 

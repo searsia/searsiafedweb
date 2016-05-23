@@ -51,7 +51,8 @@ public class FedwebEngines {
     
     /**
      * Use the data from 2013, to estimate the logit transform of the probability of relevance
-     * given the resource.
+     * given the resource, i.e.
+     *   prior(resource) = log(P(resource|Rel) / P(resource|NonRel))
      * @param data
      */
 	private static void collect2013relevanceInfo(String data) {
@@ -63,6 +64,7 @@ public class FedwebEngines {
             while ((line = br.readLine()) != null) {
                 String fields[] = line.split(" ");
                 String document = fields[2];
+                fields[3] = fields[3].replace(".000", ""); // in case it's the 2014 qrels
                 Integer relevant = new Integer(fields[3]);
                 String moreFields[] = document.split("-");
                 String resource = moreFields[1];

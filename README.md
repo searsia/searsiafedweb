@@ -39,7 +39,7 @@ Step 6, Create the FedWeb14 sample index (same optional parameters):
 * You see "Index 0XX" for each engine that has samples;
 * Some engines do not exist, causing normal warnings ("No e006.xml");
 
-Step 7, Start the Searsia server:
+Step 7, Start the Searsia server (also works with released `searsiaserver.jar`):
 
     java -jar target/searsiafedweb.jar -mother=none -name=fedweb14 --path=index
 
