@@ -177,7 +177,7 @@ public class FedwebSamples extends DefaultHandler {
             rid = rid.substring(rid.length() -3, rid.length());
             System.out.println("Insert " + rid);
             try {
-                String xmlFile = data + "/search_data/fedweb14/FW14-sample-search/e" + rid + "/e" + rid + ".xml";
+                String xmlFile = data + "search_data/fedweb14/FW14-sample-search/e" + rid + "/e" + rid + ".xml";
                 new FedwebSamples(index, xmlFile);
             } catch (IOException e) {
             	System.out.println("Warning: No e" + rid + ".xml");

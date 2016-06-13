@@ -122,39 +122,44 @@ public class FedwebEngines {
 			String name = fields[1];
 			String url  = fields[2];
 			Float prior = 1.0f;
-			if (rid.startsWith("FW14-")) {
-				rid = rid.substring(5);
-	            if (fields.length > 5) {
-	                prior = Float.parseFloat(fields[5]);
-	            } else {
-	                prior = new Float(computePrior(rid));
-	            }
-				Resource engine = new Resource(FW_URL + rid, rid);
-	    		if (url.startsWith("http"))
-    	    		engine.setUrlUserTemplate(url);
+			if (!rid.equals("engineID")) {
+			    if (rid.startsWith("FW14-")) {
+			        rid = rid.substring(5);
+			    }
+			    if (fields.length > 5) {
+			        prior = Float.parseFloat(fields[5]);
+			    } else {
+			        prior = new Float(computePrior(rid));
+			    }
+			    Resource engine = new Resource(FW_URL + rid, rid);
+			    if (url.startsWith("http")) {
+			        engine.setUrlUserTemplate(url);
+			    }
 			    engine.setName(name);
-    			engine.setMimeType("application/searsia+json");
-    			engine.setPrior(prior);
-	    		engines.put(engine);    		
-		    	
-			    String engineString = engine.toJson().toString();			
-    			File engineDir = new File(path, resultDirName + "/" + rid);
-	    	    if (!engineDir.exists()) {
-		    	    engineDir.mkdir();
-    		    }
-	    	    engineString = "\"resource\":" + engineString;
-		    	System.out.println("Add:  " + engineString);
-		        Files.write(Paths.get(path, resultDirName + "/" + rid +  "/resource.json"), engineString.getBytes(), StandardOpenOption.CREATE);
-			}				
+			    engine.setMimeType("application/searsia+json");
+			    engine.setPrior(prior);
+			    engines.put(engine);
+
+                File engineDir = new File(path, resultDirName + "/" + rid);
+                if (!engineDir.exists()) {
+                    engineDir.mkdir();
+                }
+                String engineString = engine.toJson().toString();
+                engineString = "{\"resource\":" + engineString + ",\"searsia\":\"v0.1\"}";
+                System.out.println("Add: " + rid);
+                Files.write(Paths.get(path, resultDirName + "/" + rid +  "/resource.json"), engineString.getBytes(), StandardOpenOption.CREATE);
+            }
 		}
 		br.close();
 
 	    Resource me = new Resource("http://localhost:16842/searsia/search?q={q?}&r={r?}"); 
     	me.setName("FedWeb 14 Search");  
-    	me.setFavicon("http://wwwhome.ewi.utwente.nl/~hiemstra/images/feddude128.png"); 
-    	me.setBanner("http://wwwhome.ewi.utwente.nl/~hiemstra/images/fedweb320.png"); 
-    	me.setTestQuery("test"); 
+    	me.setFavicon("http://wwwhome.ewi.utwente.nl/~hiemstra/fedweb/fedweb-icon.png");
+    	me.setBanner("http://wwwhome.ewi.utwente.nl/~hiemstra/fedweb/fedweb-banner.png");
+    	me.setTestQuery("test");
+
     	engines.putMyself(me);
+    	engines.close();
 
 	}
 
