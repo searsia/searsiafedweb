@@ -1,5 +1,5 @@
-Searsia FedWeb14 Experiments
-============================
+Searsia TREC FedWeb14 Experiments
+=================================
 
 Step 1, Download from FedWeb Greatest Hits (https://fedwebgh.intec.ugent.be):
 
@@ -39,7 +39,7 @@ Step 6, Create the FedWeb14 sample index (same optional parameters):
 * You see "Index 0XX" for each engine that has samples;
 * Some engines do not exist, causing normal warnings ("No e006.xml");
 
-Step 7, Start the Searsia server (also works with released `searsiaserver.jar`):
+Step 7, Start the Searsia server (also works with `searsiaserver.jar` v0.4.0):
 
     java -jar target/searsiafedweb.jar -mother=none -name=fedweb14 --path=index
 
@@ -60,3 +60,9 @@ Expected result:
     (...)
     all,0.6097,0.6637,0.6829,0.4307,0.5139
 
+More information: Thomas Demeester, Dolf Trieschnigg, Dong Nguyen, Ke Zhou, 
+and Djoerd Hiemstra. [Overview of the TREC 2014 Federated Web Search Track][1], 
+In: Proceedings of the 23rd Text REtrieval Conference Proceedings (TREC), 
+2015. 
+
+[1]: http://trec.nist.gov/pubs/trec23/papers/overview-federated.pdf "FedWeb14"
