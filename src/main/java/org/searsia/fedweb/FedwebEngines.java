@@ -11,6 +11,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.xpath.XPathExpressionException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.searsia.index.ResourceIndex;
 import org.searsia.engine.Resource;
 
@@ -85,32 +89,24 @@ public class FedwebEngines {
 	    }
 	}
 	
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, XPathExpressionException, JSONException {
 
     	String data = "fedwebgh";
     	String path = "index";
-    	String file = "fedweb14";
+    	String id   = "fedweb14";
     	
     	if (args.length > 0)
     		data = args[0];
     	if (args.length > 1)
     		path = args[1];
-    	if (args.length > 2)
-    		file = args[2];
     	
     	if (!data.endsWith("/")) {
     		data +=  "/";
     	}
-    	file = "local_" + file;
-    
-    	ResourceIndex engines = new ResourceIndex(path, file);
-       	
-    	/* Special directory, to simulate search engine */
-    	String resultDirName = file + "_results";
-    	File resultDir = new File(path, resultDirName);
-	    if (!resultDir.exists()) {
-	    	resultDir.mkdir();
-	    }
+    	String hash = org.searsia.Main.getHashString("file:" + path + "/" + id + ".json");
+    	String file = id + "_" + hash;
+    	ResourceIndex engines = new ResourceIndex(path, file + "_sources");      	
+    	String resultDirName = path;
 	    
 	    collect2013relevanceInfo(data);
     	
@@ -131,13 +127,17 @@ public class FedwebEngines {
 			    } else {
 			        prior = new Float(computePrior(rid));
 			    }
-			    Resource engine = new Resource(FW_URL + rid, rid);
+			    JSONObject json = new JSONObject();
+			    json.put("apitemplate", FW_URL);
+			    json.put("id", rid);
 			    if (url.startsWith("http")) {
-			        engine.setUrlUserTemplate(url);
+			        json.put("urltemplate", url);
 			    }
-			    engine.setName(name);
-			    engine.setMimeType("application/searsia+json");
-			    engine.setPrior(prior);
+			    json.put("name", name);
+			    json.put("mimetype", "application/searsia+json");
+			    json.put("prior", prior);
+
+                Resource engine = new Resource(json);
 			    engines.put(engine);
 
                 File engineDir = new File(path, resultDirName + "/" + rid);
@@ -145,20 +145,22 @@ public class FedwebEngines {
                     engineDir.mkdir();
                 }
                 String engineString = engine.toJson().toString();
-                engineString = "{\"resource\":" + engineString + ",\"searsia\":\"v0.1\"}";
+                engineString = "{\"resource\":" + engineString + ",\"searsia\":\"v1.0.0\"}";
                 System.out.println("Add: " + rid);
                 Files.write(Paths.get(path, resultDirName + "/" + rid +  "/resource.json"), engineString.getBytes(), StandardOpenOption.CREATE);
             }
 		}
 		br.close();
 
-	    Resource me = new Resource("http://localhost:16842/searsia/search?q={q?}&r={r?}"); 
-    	me.setName("FedWeb 14 Search");  
-    	me.setFavicon("http://wwwhome.ewi.utwente.nl/~hiemstra/fedweb/fedweb-icon.png");
-    	me.setBanner("http://wwwhome.ewi.utwente.nl/~hiemstra/fedweb/fedweb-banner.png");
-    	me.setTestQuery("test");
+		JSONObject json = new JSONObject();
+		json.put("id",      "fedweb14");
+        json.put("name",    "FedWeb 14 Search");
+        json.put("favicon", "http://wwwhome.ewi.utwente.nl/~hiemstra/fedweb/fedweb-icon.png");
+        json.put("banner",  "http://wwwhome.ewi.utwente.nl/~hiemstra/fedweb/fedweb-banner.png");
+        json.put("testquery", "test");
+	    Resource me = new Resource(json); 
 
-    	engines.putMyself(me);
+	    engines.putMyself(me);
     	engines.close();
 
 	}

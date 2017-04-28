@@ -3,7 +3,7 @@
   <groupId>org.searsia</groupId>
   <artifactId>searsiafedweb</artifactId>
   <packaging>jar</packaging>
-  <version>0.4.0</version>
+  <version>1.0.0</version>
   <name>Searsia FedWeb Experiments</name>
   <description></description>
   <url>http://searsia.org</url>
@@ -55,7 +55,7 @@
     <dependency>
       <groupId>org.searsia</groupId>
       <artifactId>searsiaserver</artifactId>
-      <version>0.4.0</version>
+      <version>1.0.0</version>
     </dependency>
   </dependencies>
 </project>

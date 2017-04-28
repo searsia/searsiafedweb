@@ -140,7 +140,7 @@ public class FedwebSamples extends DefaultHandler {
         	if (currentResult.getHits().size() > 0) {
                 index.offer(currentResult);
                 try {
-                    index.check();
+                    index.checkFlush();
                 }
                 catch (IOException e) {
                 	throw new RuntimeException(e);
@@ -155,22 +155,20 @@ public class FedwebSamples extends DefaultHandler {
 
         String data = "fedwebgh";
     	String path = "index";
-    	String file = "fedweb14";
+    	String name = "fedweb14";
     	
     	if (args.length > 0)
     		data = args[0];
     	if (args.length > 1)
     		path = args[1];
-    	if (args.length > 2)
-    		file = args[2];
     	
     	if (!data.endsWith("/")) {
     		data +=  "/";
     	}
     	
-    	file = "local_" + file;
+    	name = "local_" + name;
     	
-    	SearchResultIndex index = new SearchResultIndex(path, file, 10000);
+    	SearchResultIndex index = new SearchResultIndex(path, name, 10000);
 
         for (int i = 1; i <= 200; i += 1) {
             String rid = "00" + Integer.toString(i); 
