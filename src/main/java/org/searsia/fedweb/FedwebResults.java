@@ -147,28 +147,30 @@ public class FedwebResults extends DefaultHandler  {
 
         String data = "fedwebgh";
     	String path = "index";
-    	String file = "fedweb14";
+    	String id = "fedweb14";
     	
     	if (args.length > 0)
     		data = args[0];
     	if (args.length > 1)
     		path = args[1];
     	if (args.length > 2)
-    		file = args[2];
+    		id = args[2];
     	
     	if (!data.endsWith("/")) {
     		data +=  "/";
     	}
     	
-    	file = "local_" + file;
-
-    	/* Special directory, to simulate search engine */
-    	String resultDirName = path + "/" + file + "_results";
-    	File resultDir = new File(resultDirName);
-	    if (!resultDir.exists()) {
-	    	resultDir.mkdir();
-	    }
-
+        
+        String hash = org.searsia.Main.getHashString("file:" + path + "/" + id + ".json");
+        String file = id + "_" + hash;
+        
+        /* Special directory, to simulate search engine */
+        String resultDirName = file + "_results";
+        File resultDir = new File(path, resultDirName);
+        if (!resultDir.exists()) {
+            resultDir.mkdir();
+        }
+        
     	for (int t = 7011; t <= 7501; t += 1) {
             for (int r = 1; r <= 200; r += 1) {
                 String tid = Integer.toString(t);

@@ -9,14 +9,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-
+import org.apache.log4j.PatternLayout;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 import org.searsia.Hit;
 import org.searsia.SearchResult;
 import org.searsia.index.SearchResultIndex;
@@ -31,7 +30,7 @@ public class FedwebSamples extends DefaultHandler {
 
 	
     private static final Logger LOGGER = Logger.getLogger("org.searsia");
-	private final static Pattern noXMLPat = Pattern.compile("(?s)\\<[^>]+>\\>"); // TODO: This does not work, why? whyyyyy??
+	private static final Pattern noXMLPat = Pattern.compile("(?s)\\<[^>]+>\\>"); // TODO: This does not work, why? whyyyyy??
 	// Maybe: http://stackoverflow.com/questions/16008974/strange-java-unicode-regular-expression-stringindexoutofboundsexception
 	
 	private SearchResultIndex index;
@@ -47,8 +46,6 @@ public class FedwebSamples extends DefaultHandler {
     public FedwebSamples(SearchResultIndex index, String xmlFile)
     		throws SAXException, ParserConfigurationException, IOException {
         this.index = index;
-        LOGGER.addAppender(new ConsoleAppender());
-        LOGGER.setLevel(Level.WARN);
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();  
         SAXParser saxParser = saxParserFactory.newSAXParser();  
         saxParser.parse(xmlFile, this);
@@ -153,6 +150,9 @@ public class FedwebSamples extends DefaultHandler {
 
     public static void main(String[] args) throws SAXException, ParserConfigurationException, IOException {
 
+        LOGGER.addAppender(new ConsoleAppender(new PatternLayout("%m%n"), ConsoleAppender.SYSTEM_ERR));
+        LOGGER.setLevel(Level.INFO);
+
         String data = "fedwebgh";
     	String path = "index";
     	String name = "fedweb14";
@@ -165,20 +165,20 @@ public class FedwebSamples extends DefaultHandler {
     	if (!data.endsWith("/")) {
     		data +=  "/";
     	}
-    	
-    	name = "local_" + name;
-    	
-    	SearchResultIndex index = new SearchResultIndex(path, name, 10000);
+    	    	
+    	String hash = org.searsia.Main.getHashString("file:" + path + "/" + name + ".json");
+        String file = name + "_" + hash;
+    	SearchResultIndex index = new SearchResultIndex(path, file, 10000);
 
         for (int i = 1; i <= 200; i += 1) {
             String rid = "00" + Integer.toString(i); 
             rid = rid.substring(rid.length() -3, rid.length());
-            System.out.println("Insert " + rid);
+            System.err.println("Insert " + rid);
             try {
                 String xmlFile = data + "search_data/fedweb14/FW14-sample-search/e" + rid + "/e" + rid + ".xml";
                 new FedwebSamples(index, xmlFile);
             } catch (IOException e) {
-            	System.out.println("Warning: No e" + rid + ".xml");
+            	System.err.println("Warning: No e" + rid + ".xml");
             }
         }
     	index.flush();

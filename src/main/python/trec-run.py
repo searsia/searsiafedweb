@@ -3,7 +3,7 @@ import requests
 import sys
 import xml.etree.ElementTree
 
-URL = 'http://localhost:16842/searsia/search'
+URL = 'http://localhost:16842/searsia/index/fedweb14.json'
 
 def trecout(qid, json): 
     tag = json['searsia'].replace('.', 'x')
