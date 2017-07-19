@@ -22,9 +22,10 @@ if (len(sys.argv) != 2):
 
 xmldoc = xml.etree.ElementTree.parse(sys.argv[1])
 for topic in xmldoc.getroot().findall('./topic'):
-    if (topic.attrib['official'] ==  'FedWeb14'): 
+    if (topic.attrib['official'] ==  'FedWeb14' and
+        topic.attrib['evaluation'] == 'TREC'):
         qid = topic.attrib['id']
         query = topic.find('./query').text
-        param = { 'q': query }
+        param = { 'q': query, 'resources': '1000' }
         response = requests.get(URL, params=param)
         trecout(qid, response.json())

@@ -17,6 +17,7 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.searsia.index.ResourceIndex;
@@ -175,9 +176,19 @@ public class FedwebEngines {
         json.put("testquery", "test");
 	    Resource me = new Resource(json);
         engines.putMyself(me);
+        
+        JSONArray jsonHits = new JSONArray();
+        Map<String, Float> hits = engines.topValuesNotDeleted("", 200);
+        for (String rid: hits.keySet()) {
+            JSONObject jsonHit = new JSONObject();
+            jsonHit.put("rid", rid);
+            jsonHit.put("score", hits.get(rid));
+            jsonHits.put(jsonHit);
+        }
 	    
 	    JSONObject jsonResource = new JSONObject();
 	    jsonResource.put("resource", json);
+        jsonResource.put("hits", jsonHits);	    
         jsonResource.put("searsia", "v1.0.0");
         
         Files.write(Paths.get(path, id + ".json"), jsonResource.toString().getBytes(), StandardOpenOption.CREATE);
